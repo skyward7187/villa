@@ -56,38 +56,39 @@ The Vesuvius Challenge Open Data repository provides access to X-ray scans, 3D v
   <table>
     <thead>
       <tr>
-        <th>Scroll Name</th>
+        <th>Papyri</th>
         <th>Progress</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td>PHerc. Paris. 4 (Scroll 1)</td>
+        <td><a href="https://scrollprize.org/link">PHerc. Paris. 4 (Scroll 1)</a></td>
         <td>~5% unwrapped</td>
       </tr>
       <tr>
-        <td>PHerc. Paris. 3 (Scroll 2)</td>
+        <td><a href="https://scrollprize.org/link">PHerc. Paris. 3 (Scroll 2)</a></td>
         <td>scanned</td>
       </tr>
       <tr>
-        <td>PHerc. 0332 (Scroll 3)</td>
+        <td><a href="https://scrollprize.org/link">PHerc. 0332 (Scroll 3)</a></td>
         <td>scanned</td>
       </tr>
       <tr>
-        <td>PHerc. 1667 (Scroll 4)</td>
+        <td><a href="https://scrollprize.org/link">PHerc. 1667 (Scroll 4)</a></td>
         <td>&gt;50% unwrapped</td>
       </tr>
       <tr>
-        <td>PHerc. 0172 (Scroll 5)</td>
+        <td><a href="https://scrollprize.org/link">PHerc. 0172 (Scroll 5)</a></td>
         <td>70% unwrapped</td>
       </tr>
       <tr>
-        <td>PHerc. 0139</td>
+        <td><a href="https://scrollprize.org/link">PHerc. 0139</a></td>
         <td>scanned</td>
       </tr>
     </tbody>
   </table>
 </div>
+
 
 ## Pipeline and Artifacts
 
