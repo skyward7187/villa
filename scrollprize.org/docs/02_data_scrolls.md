@@ -49,10 +49,32 @@ The scroll in which [first letters](firstletters) were discovered and the [2023 
 
 <p>See the PHerc. Paris 4 (Scroll 1) scan volume [in your browser](https://dl.ash2txt.org/view/Scroll1)</p>
 
-Volumes:
+<div>
+  <table>
+    <thead>
+      <tr>
+        <th>Volume</th>
+        <th>Scan parameters</th>
+        <th>Data format</th>
+        <th>Total Size</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>20230205180739 (scroll top half)</td>
+        <td>7.91µm, 54keV</td>
+        <td>14,376 × 128MB .tif files</td>
+        <td>1.84 TB</td>
+      </tr>
+      <tr>
+        <td>20230206171837 (scroll bottom half)</td>
+        <td>7.91µm, 54keV</td>
+        <td>10,532 × 130MB .tif files</td>
+        <td>1.37 TB</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-* [20230205180739](https://dl.ash2txt.org/full-scrolls/Scroll1/PHercParis4.volpkg/volumes/20230205180739/) (scroll top half): 7.91µm, 54keV, 14,376 x 128MB .tif files. Total size: 1.84 TB
-* [20230206171837](https://dl.ash2txt.org/full-scrolls/Scroll1/PHercParis4.volpkg/volumes/20230206171837/) (scroll bottom half): 7.91µm, 54keV, 10,532 x 130MB .tif files. Total size: 1.37 TB
-* surface preds
 
 Placeholder: Virtual void clone for just this scroll's segments?
