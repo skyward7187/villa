@@ -45,7 +45,7 @@ The scroll in which [first letters](firstletters) were discovered and the [2023 
 <p><div className="flex w-[100%]">
   <div className="w-[100%] mb-2 mr-2"><img src="/img/overview/scroll1-actual-new.webp" className="w-[100%]"/><figcaption className="mt-0">PHerc. Paris 4 (Scroll 1)</figcaption></div>
 </div>
-<iframe className="w-[100%] max-w-[500px] mb-4 aspect-square" src="https://www.youtube.com/embed/cY5BIxkf5m0"  title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe></p>
+</p>
 
 <p>See the PHerc. Paris 4 (Scroll 1) scan volume [in your browser](https://dl.ash2txt.org/view/Scroll1)</p>
 
