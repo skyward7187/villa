@@ -36,88 +36,325 @@ hide_table_of_contents: true
   />
 </head>
 
-**To download:** Fill out the [registration form](https://forms.gle/HV1J6dJbmCB2z5QL8) and then visit the [data server](https://dl.ash2txt.org).
-
 > **Work‑in‑progress 👷‍♀️**   We are transitioning data hosting to a new repository and additional data will be served [here](https://data.aws.ash2txt.org/samples/)!
 
-* [EduceLab-Scrolls (2019)](https://arxiv.org/abs/2304.02084): technical paper describing the original data.
-* [EduceLab Data Sheet (2023)](https://drive.google.com/file/d/1I6JNrR6A9pMdANbn6uAuXbcDNwjk8qZ2/view?usp=sharing): technical paper describing more recent scans added to the dataset.
-* [Scan at ESRF Draft Info Sheet (2025)](https://docs.google.com/document/d/1CDPgx7XhNsnLJw6uErT8Z5tgY3wnETQdvXpR5Kwu9K4/edit?usp=sharing)
-* [Tutorials](tutorial): what to do with the data.
-* Our libraries to access data in 1-2 lines of code: in [Python](https://github.com/ScrollPrize/villa/tree/main/vesuvius) (with [intro notebook](https://colab.research.google.com/github/ScrollPrize/villa/blob/main/vesuvius/notebooks/example1_data_access.ipynb)) and [in C](https://github.com/ScrollPrize/villa/tree/main/vesuvius-c)!
+**To download:** Fill out the [registration form](https://forms.gle/HV1J6dJbmCB2z5QL8) and then visit the [data server](https://dl.ash2txt.org).
 
-## Scrolls
+;TLDR [example quick data access notebook](examples/get-to-know-a-dataset.ipynb)
 
-Micro-CT scans of intact Herculaneum scrolls.
-The mission is to virtually unwrap the contents of the scrolls from the CT scans, revealing the text hidden within.
-Scroll 1 was used to win the 2023 Grand Prize, but 95% of the scroll remains unread!
+## Overview
 
-[More information](data_scrolls)
+A vast library of papyrus scrolls in ancient Herculaneum was buried beneath twenty meters of volcanic mud and ash during the 79 AD eruption of Mount Vesuvius, carbonized into a fragile but miraculously preserved state. The Vesuvius Challenge uses micro‑CT imaging to study both intact Herculaneum scrolls and detached fragments. Our goal is to virtually unwrap the scrolls from their 3D X‑ray volumes and recover the text hidden inside the scrolls. Detached fragments contain exposed ink and provide ground truth for improving machine‑learning ink detection models.
+
+X-ray scans were acquired at various resolutions and energy levels were performed at the Diamond Light Source DLS and European Synchrotron Radiation Facility (ESRF), producing volumetric datasets.
+
+The Vesuvius Challenge Open Data repository provides access to X-ray scans, 3D volumes, segmented surfaces, and machine learning results for the Herculaneum papyri. This dataset supports researchers working on virtually unrolling and reading ancient carbonized scrolls from the Villa of the Papyri in Herculaneum.
+
+## Scrolls and Fragments
 
 <div>
   <table>
+    <thead>
+      <tr>
+        <th>Scroll Name</th>
+        <th>Progress</th>
+      </tr>
+    </thead>
     <tbody>
       <tr>
-        <td>
-          <div className="flex flex-wrap max-w-[500px]">
-            <div className="sm:w-[45%] mb-2 mr-2"><img src="/img/overview/scroll1-actual-new.webp" className="w-[100%]"/><figcaption className="mt-[-6px]">PHerc. Paris. 4 (Scroll 1)</figcaption></div>
-            <div className="sm:w-[45%] mb-2"><img src="/img/overview/scroll2-small-actual.webp" className="w-[100%]"/><figcaption className="mt-[-6px]">PHerc. Paris. 3 (Scroll 2)</figcaption></div>
-            <div className="sm:w-[35.5%] mb-2 mr-2"><img src="/img/overview/PHerc332.webp" className="w-[100%]"/><figcaption className="mt-[-6px]">PHerc. 332 (Scroll 3)</figcaption></div>
-            <div className="sm:w-[55%] mb-2"><img src="/img/overview/PHerc1667.webp" className="w-[100%]"/><figcaption className="mt-[-6px]">PHerc. 1667 (Scroll 4)</figcaption></div>
-            <div className="sm:w-[55%] mb-2"><img src="/img/overview/PHerc172.webp" className="w-[100%]"/><figcaption className="mt-[-6px]">PHerc. 172 (Scroll 5)</figcaption></div>
-            <div className="sm:w-[55%] mb-2"><img src="/img/overview/PHerc139.jpg" className="w-[100%]"/><figcaption className="mt-[-6px]">PHerc. 139</figcaption></div>
-          </div>
-        </td>
+        <td>PHerc. Paris. 4 (Scroll 1)</td>
+        <td>~5% unwrapped</td>
+      </tr>
+      <tr>
+        <td>PHerc. Paris. 3 (Scroll 2)</td>
+        <td>scanned</td>
+      </tr>
+      <tr>
+        <td>PHerc. 0332 (Scroll 3)</td>
+        <td>scanned</td>
+      </tr>
+      <tr>
+        <td>PHerc. 1667 (Scroll 4)</td>
+        <td>&gt;50% unwrapped</td>
+      </tr>
+      <tr>
+        <td>PHerc. 0172 (Scroll 5)</td>
+        <td>70% unwrapped</td>
+      </tr>
+      <tr>
+        <td>PHerc. 0139</td>
+        <td>scanned</td>
       </tr>
     </tbody>
   </table>
 </div>
 
-## Fragments
+## Pipeline and Artifacts
 
-Micro-CT scans of detached scroll fragments.
-Since the fragments have exposed text on their surfaces, they can be used as ground truth for machine learning-based ink detection approaches (see [Tutorial 5: Ink Detection](tutorial5)).
+- [EduceLab-Scrolls (2019)](https://arxiv.org/abs/2304.02084): technical paper describing the original data.
+- [EduceLab Data Sheet (2023)](https://drive.google.com/file/d/1I6JNrR6A9pMdANbn6uAuXbcDNwjk8qZ2/view?usp=sharing): technical paper describing more recent scans added to the dataset.
+- [Scan at ESRF Draft Info Sheet (2025)](https://docs.google.com/document/d/1CDPgx7XhNsnLJw6uErT8Z5tgY3wnETQdvXpR5Kwu9K4/edit?usp=sharing)
 
-[More information](data_fragments)
+- Scan Acquisition: X-ray tomography scans of scrolls and fragments at synchrotron facilities leading to raw projection data (currently not shared)
+- Volume Reconstruction: Conversion of raw projections into 3D volumetric datasets, these usually consist of 2D slices of tifs (currently not shared)
+- Volume Masking and Export: Isolating the papyrus material from the background roughly, windowing the 16 bit intensities and exporting as 8-bit OME-Zarr arrays leading to _volumes_
+- ML-based Surface Prediction: Using neural networks to predict papyrus surface locations within the volumes leading to _predicted surfaces_
+- Segmentation and Surface Extraction: Identifying papyrus layers and extracting 3D surface meshes leading to _segments_
+- Ink Detection: Applying machine learning models to identify ink patterns on the papyrus surfaces leading to _ink detection results_
 
-<div>
-  <table>
-    <tbody>
-      <tr>
-        <td>
-          <div className="flex flex-wrap">
-            <div className="sm:w-[45%] max-w-[200px] mb-2 mr-2"><img src="/img/data/fr1.webp" className="w-[100%]"/><figcaption className="mt-[-6px]">PHerc. Paris. 2 Fr 47 (Fragment 1)</figcaption></div>
-            <div className="sm:w-[45%] max-w-[200px] mb-2 mr-2"><img src="/img/data/fr2.webp" className="w-[100%]"/><figcaption className="mt-[-6px]">PHerc. Paris. 2 Fr 143 (Fragment 2)</figcaption></div>
-            <div className="sm:w-[45%] max-w-[200px] mb-2 mr-2"><img src="/img/data/fr3.webp" className="w-[100%]"/><figcaption className="mt-[-6px]">PHerc. Paris. 1 Fr 34 (Fragment 3)</figcaption></div>
-            <div className="sm:w-[45%] max-w-[200px] mb-2 mr-2"><img src="/img/data/fr4.webp" className="w-[100%]"/><figcaption className="mt-[-6px]">PHerc. Paris. 1 Fr 39 (Fragment 4)</figcaption></div>
-            <div className="sm:w-[45%] max-w-[130px] mb-2 mr-2"><img src="/img/data/fr5.webp" className="w-[100%]"/><figcaption className="mt-[-6px]">PHerc. 1667 Cr 1 Fr 3 (Fragment 5)</figcaption></div>
-            <div className="sm:w-[45%] max-w-[220px] mb-2 mr-2"><img src="/img/data/fr6.webp" className="w-[100%]"/><figcaption className="mt-[-6px]">PHerc. 51 Cr 4 Fr 48 (Fragment 6)</figcaption></div>
-            <div className="sm:w-[45%] max-w-[220px] mb-2 mr-2"><img src="/img/data/PHerc0009B-ir.JPG" className="w-[100%]"/><figcaption className="mt-[-6px]">PHerc. 9B</figcaption></div>
-            <div className="sm:w-[45%] max-w-[220px] mb-2 mr-2"><img src="/img/data/PHerc0343P-ir.JPG" className="w-[100%]"/><figcaption className="mt-[-6px]">PHerc. 343P</figcaption></div>
-            <div className="sm:w-[45%] max-w-[220px] mb-2 mr-2"><img src="/img/data/PHerc0500P2-ir.JPG" className="w-[100%]"/><figcaption className="mt-[-6px]">PHerc. 500P2</figcaption></div>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+## Data Organization
 
-## Segments
+### Repository Structure
 
-Segmentation is the mapping of sheets of papyrus in a 3D X-ray volume. The resulting surface volumes can be used directly to look for ink.
+```
+s3://vesuvius-challenge-open-data/
+├── PHerc0332/
+├── PHerc1667/
+└── ...
+```
 
-[More information](data_segments)
+#### Sample Data Structure
 
-<div>
-  <table>
-    <tbody>
-      <tr>
-        <td>
-          <div className="flex flex-wrap max-w-[500px]">
-            <div className="w-[100%] max-w-[400px] mb-4"><div className="overflow-hidden mb-2"><img loading="eager" src="/img/data/segmentation-animation.webp" className="w-[100%] mt-[-30px] mb-[-50px]"/></div><figcaption className="mt-[-6px]">Some segments from Scroll 1.</figcaption></div>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+Each sample (e.g., `PHerc0332/`) contains:
+
+```
+PHerc0332/
+├── volumes/          # 3D volumetric scan data
+├── segments/         # Segmented papyrus surfaces
+├── representations/  # Derived representations (e.g., predicted surfaces, ink detection)
+|   ├── predictions/
+|   |   ├── surfaces/ # Predicted papyrus surfaces
+└── scans/            # Raw scan metadata (if available and shared)
+```
+
+#### Volumes
+
+Volumes are 3D reconstructions of X-ray scans stored in OME-ZARR format.
+
+**Directory structure:**
+
+```
+volumes/
+└── {id}-{descriptive suffix}.zarr/
+    ├── 0/            # Highest resolution level
+    ├── 1/            # Downsampled level 1
+    ├── 2/            # Downsampled level 2
+    ├── ...           # Additional downsampled levels
+    └── .zattrs       # OME-ZARR metadata
+```
+
+**Example:**
+
+- `20231201141544-3.240um-70keV-masked.zarr` - 3.24um resolution scan at 70keV, masked to show only papyrus
+
+#### Segments
+
+Segments represent extracted papyrus surfaces with mesh data, extracted surface volumes, and ink detection results.
+
+**Directory structure:**
+
+```
+segments/
+└── {id}-{suffix}/
+    ├── mesh/
+    │   ├── intermediate/
+    │   │   ├── tifxyz_original/        # Original TIFXYZ coordinates
+    │   │   ├── {id}_original.obj       # Original 3D mesh from volume
+    │   │   ├── {id}_flattened.obj      # Flattened mesh
+    │   │   └── {id}_normalized.obj     # Oriented and normalized mesh
+    │   └── tifxyz/
+    │       ├── x.tif                   # X coordinates for each pixel
+    │       ├── y.tif                   # Y coordinates for each pixel
+    │       ├── z.tif                   # Z coordinates for each pixel
+    │       └── meta.json               # Metadata about the TIFXYZ mesh
+    ├── surface-volumes/                # Extracted volumes at different resolutions
+    │   ├── {resolution}-{energy}-volume-{volume_id}.zarr/
+    │   │   ├── 0/                      # Highest resolution level
+    │   │   ├── 1/                      # Downsampled level 1
+    │   │   ├── ...                     # Additional downsampled levels
+    │   │   ├── .zattrs                 # OME-ZARR metadata
+    │   │   └── .zgroup
+    │   └── {resolution}-{energy}-volume-{volume_id}.tifs/
+    │       ├── 00.tif                  # Layer 0 (surface)
+    │       ├── 01.tif                  # Layer 1
+    │       ├── ...
+    │       └── NN.tif                  # Layer N (depth varies by segment)
+    └── ink-detection/                  # Ink detection results (if available)
+        └── {sample}-{segment_id}-{volume_id}-{model_id}-tile{size}-stride{size}.tif
+```
+
+**Surface volumes** contain texture data extracted from the parent volume along the segment surface at different depths. These are available in both OME-ZARR format (for streaming access) and as TIFF stacks (numbered 00.tif, 01.tif, etc.).
+
+**Ink detection results** are prediction outputs from machine learning models applied to segment surface volumes. The filename encodes:
+
+- Sample ID
+- Segment ID
+- Volume ID used for extraction
+- Model ID used for inference
+- Tiling parameters (tile size and stride for processing large images)
+
+**Example:** `PHerc0139-20250731185658-2.403um-0.22m-77keV-volume-20250820105138-20250807020208-canonical-2um-tile256-stride82.tif`
+
+#### Representations
+
+Representations contain derived data products generated from volumes, such as ML model predictions.
+
+**Directory structure:**
+
+```
+representations/
+└── predictions/
+    └── surfaces/                       # Predicted papyrus surfaces
+        └── {volume_id}-surface-{model_id}.zarr/
+            ├── 0/                      # Highest resolution level
+            ├── 1/                      # Downsampled level 1
+            ├── ...
+            ├── .zattrs                 # OME-ZARR metadata
+            └── .zgroup
+```
+
+**Predicted surfaces** are ML model outputs that identify papyrus surface locations within volumes. These are stored as OME-ZARR volumes with the same spatial dimensions as the source volume, where voxel values indicate the probability or presence of a surface at that location.
+
+## ID and Naming Conventions
+
+All IDs follow a UTC datetime-based format: `YYYYMMDDhhmmss`
+
+**Structure:**
+
+- **Short ID:** `20231201141544` (creation timestamp)
+- **Long ID:** `20231201141544-3.240um-70keV` (includes descriptive metadata)
+- **Full filename:** `20231201141544-3.240um-70keV-masked.zarr` (includes suffix)
+
+**Naming components:**
+
+- **Resolution:** `3.240um` - pixel/voxel size in micrometers
+- **Energy:** `70keV` - X-ray energy
+- **Suffix:** `masked`, `masked.zarr`, `tiff_16bits`, etc. - processing or format indicator
+
+## Data Types and Formats
+
+### Volume Formats
+
+| Format       | Description                          | Usage                                                  |
+| ------------ | ------------------------------------ | ------------------------------------------------------ |
+| **OME-ZARR** | Cloud-optimized chunked array format | Primary distribution format, supports streaming access |
+| **TIFF**     | Traditional image stack              | Legacy format, full download required                  |
+
+#### OME-ZARR Volumes
+
+An [OME-ZARR](https://ngff.openmicroscopy.org/latest/) volume is a cloud-optimized, chunked, multi-resolution representation of 3D volumetric data. Volumes are stored in a hierarchical directory structure with multiple resolution levels for efficient access. Each level (with level 0 being the highest resolution) is stored in its own subdirectory which itself represents a self-contained [zarr](https://zarr.readthedocs.io/en/stable/) array. Volume data is usually stored with 8-bit intensities in
+128^3 voxel chunks (a trade-off between reasonable interactive access speeds and storage concerns).
+
+#### TIFF Stacks
+
+Volumes and Segments might be exported as traditional TIFF stacks (usually 8 bit). These are stored as a series of 2D TIFF images in a directory. Each image represents a slice of the 3D volume or segment.
+
+### Mesh Formats
+
+| Format     | Description                     | Usage                                        |
+| ---------- | ------------------------------- | -------------------------------------------- |
+| **OBJ**    | 3D mesh with vertices and faces | Surface geometry                             |
+| **TIFXYZ** | Three TIFF images (x, y, z)     | Per-pixel 3D coordinates for texture mapping |
+
+#### Waveform Mesh (.obj)
+
+Segments are represented as 3D meshes in the Wavefront OBJ format. These files contain vertex and face information to define the geometry of the papyrus surfaces. The vertice coordinates are in a 3D space corresponding to the original volume. The texture coordinates represent the 2D flattened space of the papyrus surface. These uv-texture coordinates are sometimes scaled to the interval [0..1] and to render an image need to be multiplied by the width/height of the segment to arrive at image
+coordinates.
+
+#### TIFXYZ Mesh (.tif)
+
+A TIFXYZ mesh is a (custom) sampled representation of a mesh that directly converts image coordinates to the 3D coordinates in the original volume. It is stored with this file structure:
+
+```tifxyz/
+├── x.tif   # 3D X coordinates for each 2D uv pixel
+├── y.tif   # 3D Y coordinates for each 2D uv pixel
+├── z.tif   # 3D Z coordinates for each 2D uv pixel
+└── meta.json  # Metadata about the TIFXYZ mesh
+```
+
+TIFXYZ is implemented and supported by [VC3D](https://github.com/ScrollPrize/villa/tree/main/volume-cartographer).
+
+#### Metadata Files
+
+(not yet published)
+
+## How to Access the Data
+
+### Web Browser
+
+Start from the Registry landing page: https://registry.opendata.aws/vesuvius-challenge-herculaneum-scrolls/
+
+### Python S3 Zarr access
+
+To access OME-ZARR volumes directly from S3 using Python, you can use the `zarr` library along with `fsspec` for remote file system access.
+
+**Runnable example:** See [`zarr_volume_access.py`](examples/zarr_volume_access.py) which can be run with:
+
+```bash
+uv run examples/zarr_volume_access.py
+```
+
+If you do not use `uv`, install the dependencies listed at the top of `examples/zarr_volume_access.py` and run `python examples/zarr_volume_access.py`.
+
+```python
+import zarr
+import fsspec
+import matplotlib.pyplot as plt
+
+# Configure S3 file system access
+s3 = fsspec.filesystem('s3', anon=True)  # Public bucket; set anon=False if using credentials
+
+# Open an OME-ZARR volume from S3
+store = s3.get_mapper('s3://vesuvius-challenge-open-data/PHerc0332/volumes/20231201141544-3.240um-70keV-masked.zarr/')
+root = zarr.open(store, mode='r')
+
+# Access data at different resolution levels
+level_0 = root['0']  # Highest resolution (full size)
+level_1 = root['1']  # 2x downsampled
+level_2 = root['2']  # 4x downsampled
+
+print(f"Level 0 shape: {level_0.shape}")  # [z, y, x]
+print(f"Level 1 shape: {level_1.shape}")
+print(f"Level 2 shape: {level_2.shape}")
+
+# Read a slice from level 1 (good balance of speed and detail)
+slice_data = level_1[2000, :, :]
+
+# Visualize the slice
+plt.figure(figsize=(10, 10))
+plt.imshow(slice_data, cmap='gray')
+plt.title('Slice 1000 from Level 1')
+plt.axis('off')
+plt.show()
+
+# For segment surface volumes (TIFF stacks), you can use tifffile:
+import tifffile
+
+# Read a specific layer from a surface volume
+with s3.open('s3://vesuvius-challenge-open-data/PHerc0139/segments/20250731185658-z_dbg_gen_09900/surface-volumes/9.362um-1.2m-113keV-volume-20250728140407.tifs/00.tif', 'rb') as f:
+    layer_0 = tifffile.imread(f)
+    plt.imshow(layer_0, cmap='gray')
+    plt.title('Surface layer 0')
+    plt.show()
+```
+
+## Support and Citation
+
+### Contact
+
+For questions or issues with the data:
+
+- Vesuvius Challenge Web Site: [https://scrollprize.org/](https://scrollprize.org/)
+- GitHub Issues: [Vesuvius Challenge repository](https://github.com/scrollprize/villa)
+- Community Forum: [Scroll Prize Discord](https://discord.gg/V4fJhvtaQn)
+
+### Citation
+
+(to be done if needed)
+
+### License
+
+[CC-BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/)
+
+
+
