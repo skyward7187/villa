@@ -56,7 +56,7 @@ bool finiteDirection(const cv::Vec3d& v)
 void printUsage(const char* argv0)
 {
     std::cerr << "Usage: " << argv0 << " <manifest.lasagna.json> [--working-to-base-scale N] [--constant-normal-jacobian] [--benchmark-solvers] [--benchmark-threads] [--trace-init] [--segments-per-side=N] [--segment-length=N] [--seed=x,y,z] [--verbose]\n"
-              << "       " << argv0 << " <manifest.lasagna.json> --fiber <fiber.json> [--reopt|--reinit-reopt|--benchmark-control-placement] [--output <fiber.json>] [--obj-output-dir <dir>] [--reinit-debug-obj-output-dir <dir>] [--strip-output-dir <dir>] [--texture-zarr <zarr>] [--texture-level N] [--strip-render-scale N] [--constant-normal-jacobian] [--verbose]\n"
+              << "       " << argv0 << " <manifest.lasagna.json> --fiber <fiber.json> [--reopt|--reinit-reopt|--benchmark-control-placement] [--output <fiber.json>] [--obj-output-dir <dir>] [--reinit-debug-obj-output-dir <dir>] [--strip-output-dir <dir>] [--tifxyz-output-dir <dir>] [--texture-zarr <zarr>] [--texture-level N] [--strip-render-scale N] [--constant-normal-jacobian] [--verbose]\n"
               << "Runs line annotation optimization at seed "
               << "[17955,15141,37891] with initial z-axis mode, or loads/reoptimizes a saved VC3D fiber.\n";
 }
@@ -1534,6 +1534,21 @@ void writeLineViewObjOutput(const vc::lasagna::LineModel& line,
                     "side_slice.mtl");
 }
 
+// Geometry-only export of the fiber's surface strip. The OBJ path above bakes a
+// rendered texture and therefore needs a volume; callers that only want the
+// ribbon as a surface (to merge with segmentation patches, say) do not.
+void writeLineViewTifxyz(const vc::lasagna::LineModel& line,
+                         const std::string& name,
+                         const std::filesystem::path& outputDir)
+{
+    ensureDirectory(outputDir);
+    const auto surfaces = vc::lasagna::buildLineViewSurfaces(line);
+    if (!surfaces.lineSurface) {
+        throw std::runtime_error("line view builder did not produce a surface strip");
+    }
+    surfaces.lineSurface->save(outputDir / name, true);
+}
+
 bool isSchurSolver(vc::lasagna::LineOptimizationConfig::LinearSolver solver)
 {
     using LinearSolver = vc::lasagna::LineOptimizationConfig::LinearSolver;
@@ -1686,6 +1701,7 @@ int main(int argc, char** argv)
     std::filesystem::path objOutputDir;
     std::filesystem::path reinitDebugObjOutputDir;
     std::filesystem::path stripOutputDir;
+    std::filesystem::path tifxyzOutputDir;
     std::filesystem::path textureZarrPath;
     int textureLevel = 0;
     int stripRenderScale = 4;
@@ -1736,6 +1752,11 @@ int main(int argc, char** argv)
                 throw std::invalid_argument("--strip-output-dir requires a directory");
             }
             stripOutputDir = argv[++i];
+        } else if (arg == "--tifxyz-output-dir") {
+            if (i + 1 >= argc) {
+                throw std::invalid_argument("--tifxyz-output-dir requires a directory");
+            }
+            tifxyzOutputDir = argv[++i];
         } else if (arg == "--texture-zarr") {
             if (i + 1 >= argc) {
                 throw std::invalid_argument("--texture-zarr requires a zarr path");
@@ -1772,6 +1793,7 @@ int main(int argc, char** argv)
         const bool wantsObjOutput = !objOutputDir.empty();
         const bool wantsReinitDebugObjOutput = !reinitDebugObjOutputDir.empty();
         const bool wantsStripOutput = !stripOutputDir.empty();
+        const bool wantsTifxyzOutput = !tifxyzOutputDir.empty();
         const bool reinitDebugFailureMode =
             reinitReopt && (wantsObjOutput || wantsReinitDebugObjOutput || wantsStripOutput);
         std::filesystem::path effectiveOutputPath = outputPath;
@@ -2164,6 +2186,15 @@ int main(int argc, char** argv)
                                        objOutputDir);
                 if (verbose) {
                     std::cout << "Saved OBJ line-view output to " << objOutputDir.string() << '\n';
+                }
+            }
+            if (wantsTifxyzOutput) {
+                const std::string stem =
+                    std::filesystem::path(fiberPath).stem().string() + ".tifxyz";
+                writeLineViewTifxyz(outputLine, stem, tifxyzOutputDir);
+                if (verbose) {
+                    std::cout << "Saved tifxyz strip to "
+                              << (tifxyzOutputDir / stem).string() << '\n';
                 }
             }
             if (wantsStripOutput) {
