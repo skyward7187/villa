@@ -41,6 +41,8 @@ from pathlib import Path
 
 import numpy as np
 
+import common
+
 EPS = 1e-12
 TWO_PI = 2.0 * math.pi
 
@@ -853,11 +855,11 @@ def draw_top(items, out_path: Path, theme: str, suspect_turns: float,
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--fibers-dir", type=Path,
-                    default=Path("/media/djosey/nvme2/fibers/PHercParis4.volpkg.json"))
+                    default=common.FIBERS_DIR)
     ap.add_argument("--volpkg", type=Path,
-                    default=Path("/media/djosey/nvme2/PHercParis4.volpkg"))
+                    default=common.VOLPKG)
     ap.add_argument("--out", type=Path,
-                    default=Path("/media/djosey/nvme2/fibers/PHercParis4_network_2d"))
+                    default=common.PLOTS)
     ap.add_argument("--theme", choices=("light", "dark"), default="dark")
     ap.add_argument("--voxel-um", type=float, default=DEFAULT_VOXEL_UM)
     ap.add_argument("--umbilicus-scale", type=float, default=DEFAULT_UMBILICUS_SCALE)

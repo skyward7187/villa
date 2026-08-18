@@ -47,6 +47,8 @@ from pathlib import Path
 
 import numpy as np
 
+import common
+
 from fiber_network_unroll import (
     DEFAULT_UMBILICUS_SCALE,
     DEFAULT_VOXEL_UM,
@@ -406,24 +408,22 @@ def patch_legend(theme, alpha, nb_alpha, with_neighbours):
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--fibers-dir", type=Path,
-                    default=Path("/media/djosey/nvme2/fibers/PHercParis4.volpkg.json"))
+                    default=common.FIBERS_DIR)
     ap.add_argument("--volpkg", type=Path,
-                    default=Path("/media/djosey/nvme2/PHercParis4.volpkg"))
+                    default=common.VOLPKG)
     ap.add_argument("--patches-dir", type=Path,
-                    default=Path("/media/djosey/nvme2/graph_patches"))
+                    default=common.PATCHES_DIR)
     ap.add_argument("--overlap", type=Path,
-                    default=Path("/media/djosey/nvme2/fiber_patch_overlap/"
-                                 "network01_patches_to_fibers.json"),
+                    default=common.overlap_report(),
                     help="patch->fiber report from fiber_patch_overlap.py")
     ap.add_argument("--neighbours", type=Path,
-                    default=Path("/media/djosey/nvme2/fiber_patch_overlap/"
-                                 "network01_patch_neighbours.json"),
+                    default=common.neighbour_report(),
                     help="patch->patch report from patch_neighbours.py; the "
                          "level of overlap one step outside the fiber network")
     ap.add_argument("--no-neighbours", action="store_true",
                     help="draw only the patches the fibers themselves run along")
     ap.add_argument("--out", type=Path,
-                    default=Path("/media/djosey/nvme2/fibers/PHercParis4_network_2d"))
+                    default=common.PLOTS)
     ap.add_argument("--component", type=int, default=0,
                     help="network index in the size-sorted list (0 = largest)")
     ap.add_argument("--theme", choices=("light", "dark"), default="dark")
@@ -443,8 +443,7 @@ def main():
                          "use; one ring is 20 ds2 voxels (192 um), where band "
                          "grower output is least reliable")
     ap.add_argument("--trust", type=Path,
-                    default=Path("/media/djosey/nvme2/fiber_patch_overlap/"
-                                 "network01_patch_trust.json"),
+                    default=common.trust_report(),
                     help="consistency report from patch_trust.py")
     ap.add_argument("--trust-tier", default=None,
                     help="draw only patches in this tier of --trust "

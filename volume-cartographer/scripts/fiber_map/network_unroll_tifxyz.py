@@ -34,7 +34,10 @@ from pathlib import Path
 
 import numpy as np
 
-sys.path.insert(0, str(Path(__file__).resolve().parent / "spiral"))
+import common
+
+common.add_scripts_to_path()
+sys.path.insert(0, str(common.SCRIPTS / "spiral"))
 
 from fiber_network_unroll import (
     DEFAULT_UMBILICUS_SCALE,
@@ -129,35 +132,33 @@ def quad_samples(xyz, valid, theta, k):
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--fibers-dir", type=Path,
-                    default=Path("/media/djosey/nvme2/fibers/PHercParis4.volpkg.json"))
+                    default=common.FIBERS_DIR)
     ap.add_argument("--volpkg", type=Path,
-                    default=Path("/media/djosey/nvme2/PHercParis4.volpkg"))
+                    default=common.VOLPKG)
     ap.add_argument("--patches-dir", type=Path,
-                    default=Path("/media/djosey/nvme2/graph_patches"))
+                    default=common.PATCHES_DIR)
     ap.add_argument("--overlap", type=Path,
-                    default=Path("/media/djosey/nvme2/fiber_patch_overlap/"
-                                 "network01_patches_to_fibers.json"))
+                    default=common.overlap_report())
     ap.add_argument("--trust", type=Path,
-                    default=Path("/media/djosey/nvme2/fiber_patch_overlap/"
-                                 "network01_patch_trust.json"))
+                    default=common.trust_report())
     ap.add_argument("--trust-tier", default="corroborated",
                     help="patch set to merge; 'placed' takes everything, "
                          "including the winding disagreements")
     ap.add_argument("--out", type=Path,
-                    default=Path("/media/djosey/nvme2/network_unrolled"))
+                    default=common.MERGED)
     ap.add_argument("--uuid", default=None)
-    ap.add_argument("--component", type=int, default=0)
+    ap.add_argument("--component", type=int, default=common.NETWORK)
     ap.add_argument("--step", type=float, default=20.0,
                     help="UV grid pitch in ds2 voxels; 20 matches the patch grid")
     ap.add_argument("--oversample", type=int, default=3,
                     help="bilinear samples per quad edge when resampling")
     ap.add_argument("--strips-dir", type=Path,
-                    default=Path("/media/djosey/nvme2/network_unrolled/strips"),
+                    default=common.MERGED / "strips",
                     help="fiber surface strips exported by "
                          "vc_lasagna_line_probe --tifxyz-output-dir")
     ap.add_argument("--no-strips", action="store_true",
                     help="merge patches only")
-    ap.add_argument("--erode-cells", type=int, default=1)
+    ap.add_argument("--erode-cells", type=int, default=common.ERODE_CELLS)
     ap.add_argument("--voxel-um", type=float, default=DEFAULT_VOXEL_UM)
     ap.add_argument("--umbilicus-scale", type=float, default=DEFAULT_UMBILICUS_SCALE)
     ap.add_argument("--patch-scale", type=float, default=DEFAULT_PATCH_SCALE)
